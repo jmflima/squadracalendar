@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create.user.dto';
+import { UpdateUserDto } from './dto/update.user.dto';
 import { User } from './user.model';
 
 //classe criada com (nest g s user)
@@ -18,11 +19,15 @@ export class UserService {
             where: {email: createUserDto.email},
         });
 
-        if (User){
+        if (user){
             throw new ConflictException("Email já foi cadastrado");
         }
 
         return this.userModel.create(createUserDto);
+    }
+
+    updateUser(id: number, updateUserDto: UpdateUserDto){
+        return this.userModel.update(updateUserDto, { where: { id: id } })
     }
 }
 
