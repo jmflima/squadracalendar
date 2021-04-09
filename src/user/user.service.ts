@@ -1,8 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create.user.dto';
 import { User } from './user.model';
 
+//classe criada com (nest g s user)
 @Injectable()
 export class UserService {
 
@@ -11,18 +13,16 @@ export class UserService {
         private userModel: typeof User,
     ) {}
     
-    async createUser(createUserDto: CreateUserDto)  {
+    async createUser(createUserDto: CreateUserDto) {
+        const user = await this.userModel.findOne({
+            where: {email: createUserDto.email},
+        });
 
-//        const user = await this.userModel.findOne({
-//            where: {email: createUserDto.email},
-//        });
+        if (User){
+            throw new ConflictException("Email já foi cadastrado");
+        }
 
- //       if (User){
- //           throw new BadRequestException("Email já foi cadastrado");
- //       }
-
-         return this.userModel.create(createUserDto);
-//        return "estou so testando";
+        return this.userModel.create(createUserDto);
     }
 }
 
