@@ -1,4 +1,4 @@
-export class FindUsersDto{
-    name?: string;
-    email?: String;
+export class FindUsersDto {
+  name?: string;
+  email?: string;
 }
